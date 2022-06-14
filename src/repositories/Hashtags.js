@@ -12,5 +12,23 @@ async function getTrendingHashtags() {
   return ranking.rows;
 }
 
-const hashtagsRepository = { getTrendingHashtags };
+async function getHashtagPosts(hashtag) {
+  const posts = db.query(
+    `
+    SELECT *
+    FROM posts
+    JOIN "hashtagPosts" ON "hashtagPosts"."postId" = posts.id
+    WHERE "hashtagPosts"."hashtagId" = (
+        SELECT id
+        FROM hashtags
+        WHERE name = $1
+    )
+    ORDER BY posts."createdAt" DESC
+    `,
+    [hashtag]
+  );
+  return posts.rows;
+}
+
+const hashtagsRepository = { getTrendingHashtags, getHashtagPosts };
 export default hashtagsRepository;
