@@ -15,6 +15,6 @@ AppRouter.use(AuthenticationRouter);
 //AppRouter.use(PostsRouter, ValidateUserToken);
 //AppRouter.use(CommentsRouter, ValidateUserToken);
 //etc
-AppRouter.use(HashtagsRouter, ValidateUserToken);
+AppRouter.use(ValidateUserToken, HashtagsRouter);
 
 export default AppRouter;
