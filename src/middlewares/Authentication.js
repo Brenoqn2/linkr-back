@@ -30,21 +30,17 @@ export async function ValidateUserToken(req, res, next) {
 
     // se a hora atual for maior que a hora de expiração do token, então o token é inválido
     if (new Date().getTime() > ValidateToken.rows[0].expiration) {
-
       // se o token estiver expirado, então encerra a sessão
       AuthenticationRepository.EndSession(token);
       return res.status(401).send('token expired');
-
-    } else {
-
-      const expirationTime = 4 * 60 * 60 * 1000; // 4 horas
-      const currentTime = new Date().getTime(); // HH:MM:SS em milisegundos
-      const expiration = currentTime + expirationTime;
-
-      AuthenticationRepository.UpdateTokenExpiration(token, expiration);
-      next();
     }
 
+    const expirationTime = 4 * 60 * 60 * 1000; // 4 horas
+    const currentTime = new Date().getTime(); // HH:MM:SS em milisegundos
+    const expiration = currentTime + expirationTime;
+
+    AuthenticationRepository.UpdateTokenExpiration(token, expiration);
+    next();
   } catch (err) {
     return res
       .status(500)
