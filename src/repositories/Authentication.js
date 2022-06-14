@@ -52,6 +52,10 @@ async function DeleteUserSessions(email) {
   )`, [email]);
 }
 
+async function GetUserToken(token) {
+  return db.query('SELECT * FROM sessions WHERE token = $1', [token]);
+}
+
 const AuthenticationRepository = {
   GetUserEmail,
   GetUserName,
