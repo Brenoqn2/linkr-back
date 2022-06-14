@@ -29,27 +29,32 @@ async function EndSession(token) {
 }
 
 async function UpdateTokenExpiration(token, expiration) {
-  return db.query(
-    'UPDATE sessions SET "expiration" = $2 WHERE token = $1',
-    [token, expiration]
-  );
+  return db.query('UPDATE sessions SET "expiration" = $2 WHERE token = $1', [
+    token,
+    expiration,
+  ]);
 }
 
 async function GetUserSessions(email) {
-
-  return db.query(`
+  return db.query(
+    `
   SELECT sessions.*, users.email FROM sessions
   JOIN users ON sessions."userId" = users.id
-  WHERE users.email = $1`, [email]);
+  WHERE users.email = $1`,
+    [email]
+  );
 }
 
 async function DeleteUserSessions(email) {
-  return db.query(`
+  return db.query(
+    `
   DELETE FROM sessions
   WHERE sessions."userId" IN (
     SELECT users.id FROM users
     WHERE users.email = $1
-  )`, [email]);
+  )`,
+    [email]
+  );
 }
 
 async function GetUserToken(token) {
@@ -64,7 +69,7 @@ const AuthenticationRepository = {
   EndSession,
   UpdateTokenExpiration,
   GetUserSessions,
-  DeleteUserSessions
+  DeleteUserSessions,
 };
 
 export default AuthenticationRepository;
