@@ -14,8 +14,28 @@ function getAllPosts(page) {
   );
 }
 
+function createPost(body, userId) {
+  const { link, content } = body;
+  return db.query(
+    `INSERT INTO posts ("userId", link, content) 
+    VALUES ($1, $2, $3)
+    `,
+    [userId, link, content]
+  );
+}
+
+function getUserIdByToken(token) {
+  return db.query(
+    `SELECT s."userId" FROM sessions s 
+    WHERE token = $1`,
+    [token]
+  );
+}
+
 const PostsRepository = {
   getAllPosts,
+  createPost,
+  getUserIdByToken,
 };
 
 export default PostsRepository;
