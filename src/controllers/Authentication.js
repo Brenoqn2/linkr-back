@@ -34,7 +34,7 @@ export async function PostSigninController(req, res) {
         const ValidatePassword = bcrypt.compareSync(password, ValidateEmail.rows[0].password);
         if (!ValidatePassword) return res.status(401).send('invalid password');
 
-        const token = TokenGenerator(ValidateEmail.rows[0].name, 'logged');
+        const token = TokenGenerator(ValidateEmail.rows[0].name, `${Date.now()}`);
         // expiration vai ser o tempo atual em milisegundos + o tempo de expiração em milisegundos ( 4 horas )
         const expiration = Date.now() + (4 * 60 * 60 * 1000);
         AuthenticationRepository.CreateSession(token, ValidateEmail.rows[0].id, expiration);
