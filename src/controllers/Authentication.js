@@ -37,15 +37,16 @@ export async function PostSigninController(req, res) {
       password,
       ValidateEmail.rows[0].password
     );
+
     if (!ValidatePassword) return res.status(401).send('invalid password');
 
-    const token = TokenGenerator(
-      ValidateEmail.rows[0].name,
-      `logged in ${Date.now()} ms`
-    );
-    // expiration vai ser o tempo atual em milisegundos + o tempo de expiração em milisegundos ( 4 horas )
-    const expiration = Date.now() + 4 * 60 * 60 * 1000;
-    AuthenticationRepository.CreateSession(
+    const token = TokenGenerator(ValidateEmail.rows[0].name, `logged`);
+    const expirationTime = 4 * 60 * 60 * 1000; // 4 horas
+    const currentTime = new Date().getTime(); // HH:MM:SS em milisegundos
+    const expiration = currentTime + expirationTime;
+
+    await AuthenticationRepository.DeleteUserSessions(email);
+    await AuthenticationRepository.CreateSession(
       token,
       ValidateEmail.rows[0].id,
       expiration
