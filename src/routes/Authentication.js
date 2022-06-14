@@ -3,7 +3,7 @@ import { Router } from 'express';
 import {
   PostSignupController,
   PostSigninController,
-} from '../controllers/AuthController.js';
+} from '../controllers/Authentication.js';
 import {
   PostSignupMiddleware,
   PostSigninMiddleware,
