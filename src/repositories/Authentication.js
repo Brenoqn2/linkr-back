@@ -9,11 +9,11 @@ async function GetUserName(name) {
   return db.query('SELECT * FROM users WHERE username = $1', [name]);
 }
 
-async function CreateUser(name, email, password, default_picture) {
+async function CreateUser(name, email, password, defaultPicture) {
   const hash = bcrypt.hashSync(password, 10);
   return db.query(
     'INSERT INTO users (username, email, password, picture) VALUES ($1, $2, $3, $4)',
-    [name, email, hash, default_picture]
+    [name, email, hash, defaultPicture]
   );
 }
 
