@@ -1,4 +1,4 @@
-import db from '../database/database.js';
+import db from '../config/database.js';
 
 async function getTrendingHashtags() {
   const ranking = db.query(`

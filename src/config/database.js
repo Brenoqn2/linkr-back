@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 /* eslint-disable no-unused-expressions */
 import pg from 'pg';
 import dotenv from 'dotenv';

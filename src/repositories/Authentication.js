@@ -1,5 +1,5 @@
 import bcrypt from 'bcrypt';
-import db from '../database/database.js';
+import db from '../config/database.js';
 
 async function GetUserEmail(email) {
   return db.query('SELECT * FROM users WHERE email = $1', [email]);
