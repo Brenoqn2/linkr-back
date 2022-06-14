@@ -70,6 +70,7 @@ const AuthenticationRepository = {
   UpdateTokenExpiration,
   GetUserSessions,
   DeleteUserSessions,
+  GetUserToken
 };
 
 export default AuthenticationRepository;
