@@ -1,11 +1,10 @@
 import bcrypt from 'bcrypt';
 import { TokenGenerator } from 'tk-generator';
-import db from '../config/database.js';
 
 import AuthenticationRepository from '../repositories/Authentication.js';
 
 export async function PostSignupController(req, res) {
-  const default_picture = 'https://i.imgur.com/62ufJYt.jpeg';
+  const defaultPicture = 'https://i.imgur.com/62ufJYt.jpeg';
   const { name, email, password } = req.body;
 
   try {
@@ -17,7 +16,7 @@ export async function PostSignupController(req, res) {
     if (ValidateName.rowCount > 0)
       return res.status(422).send('this name has already been registered');
 
-    AuthenticationRepository.CreateUser(name, email, password, default_picture);
+    AuthenticationRepository.CreateUser(name, email, password, defaultPicture);
     res.status(201).send('user created successfully');
   } catch (err) {
     return res
@@ -30,7 +29,6 @@ export async function PostSigninController(req, res) {
   const { email, password } = req.body;
 
   try {
-
     const ValidateEmail = await AuthenticationRepository.GetUserEmail(email);
     if (ValidateEmail.rowCount === 0)
       return res.status(401).send('this email has not been registered');
@@ -48,9 +46,12 @@ export async function PostSigninController(req, res) {
     const expiration = currentTime + expirationTime;
 
     await AuthenticationRepository.DeleteUserSessions(email);
-    await AuthenticationRepository.CreateSession(token, ValidateEmail.rows[0].id, expiration);
+    await AuthenticationRepository.CreateSession(
+      token,
+      ValidateEmail.rows[0].id,
+      expiration
+    );
     res.status(200).send(token);
-
   } catch (err) {
     return res
       .status(500)
