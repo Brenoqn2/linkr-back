@@ -2,7 +2,7 @@ import {
   PostSignupSchema,
   PostSigninSchema,
 } from '../schemas/Authentication.js';
-import AuthenticationRepository from '../repositories/Authentication.js';
+import AuthenticationRepository from '../repositories/AuthRepository.js';
 
 export async function PostSignupMiddleware(req, res, next) {
   const { error } = PostSignupSchema.validate(req.body, { abortEarly: false });

@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt';
 import { TokenGenerator } from 'tk-generator';
 
-import AuthenticationRepository from '../repositories/Authentication.js';
+import AuthenticationRepository from '../repositories/AuthRepository.js';
 
 export async function PostSignupController(req, res) {
   const default_picture = 'https://i.imgur.com/62ufJYt.jpeg';
