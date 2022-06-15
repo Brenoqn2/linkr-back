@@ -1,17 +1,31 @@
 import db from '../config/database.js';
 
 function getAllPosts(page) {
-  const offset = (page - 1) * 20;
+  const offset = page ? (page - 1) * 20 : 0;
 
   return db.query(
     `--sql
-        SELECT * FROM POSTS
+        SELECT 
+          POSTS.*,
+          USERS.username,
+          USERS.picture
+        FROM POSTS
+        JOIN USERS ON POSTS."userId" = USERS.id
         ORDER BY "createdAt" DESC
         OFFSET $1
         LIMIT 20
     `,
     [offset]
   );
+}
+
+function getPostById(id) {
+  return db.query(
+    `--sql
+      SELECT * FROM POSTS
+      WHERE id = $1
+    `,
+    [id])
 }
 
 function createPost(body, userId) {
@@ -24,7 +38,7 @@ function createPost(body, userId) {
   );
 }
 
-function getUserIdByToken(token) {
+function getUserIdByToken(token) { //! CRIAR UM REPOSITORIO PRA USERS E REALOCAR ESTA FUNCAO PARA LA !
   return db.query(
     `SELECT s."userId" FROM sessions s 
     WHERE token = $1`,
@@ -34,8 +48,10 @@ function getUserIdByToken(token) {
 
 const PostsRepository = {
   getAllPosts,
+  getPostById,
   createPost,
   getUserIdByToken,
+
 };
 
 export default PostsRepository;

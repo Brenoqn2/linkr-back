@@ -1,6 +1,8 @@
 import { Router } from 'express';
 
+import PostsRouter from './PostsRouter.js';
 import AuthenticationRouter from './Authentication.js';
+
 import { ValidateUserToken } from '../middlewares/Authentication.js';
 import HashtagsRouter from './Hashtags.js';
 import PostsRouter from './PostsRouter.js';
