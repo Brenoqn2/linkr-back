@@ -50,7 +50,6 @@ export async function createPost(req, res) {
 
   try {
     const { rows: results } = await UserRepository.getUserByToken(token);
-    console.log(results);
     const [result] = results;
     const { id } = result;
 
