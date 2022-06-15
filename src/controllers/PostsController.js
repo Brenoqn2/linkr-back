@@ -31,7 +31,7 @@ export async function createPost(req, res) {
     res.sendStatus(201);
   } catch (err) {
     res.status(500).send({
-      message: 'Internal error while getting posts',
+      message: 'Internal error while creating post',
       error: err,
     });
   }
