@@ -7,11 +7,12 @@ import router from './src/routes/index.js';
 dotenv.config();
 
 const app = express();
+
 app.use(cors());
 app.use(express.json());
-
 app.use(router);
 
-app.listen(process.env.PORT, () => {
-  console.log(`Server is running on port ${process.env.PORT || 4000}`);
+const port = process.env.PORT || 4000;
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
 });
