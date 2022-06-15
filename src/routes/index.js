@@ -5,7 +5,6 @@ import AuthenticationRouter from './Authentication.js';
 
 import { ValidateUserToken } from '../middlewares/Authentication.js';
 import HashtagsRouter from './Hashtags.js';
-import PostsRouter from './PostsRouter.js';
 
 const router = Router();
 
