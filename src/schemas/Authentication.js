@@ -1,3 +1,4 @@
+/* eslint-disable prefer-regex-literals */
 import joi from 'joi';
 
 export const PostSignupSchema = joi.object({

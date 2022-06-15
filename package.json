@@ -5,8 +5,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+<<<<<<< HEAD
     "start": "node index.js",
     "dev": "npx nodemon index.js"
+=======
+    "start": "node ./index.js",
+    "dev": "npx nodemon src/index.js"
+>>>>>>> main
   },
   "keywords": [],
   "author": "",

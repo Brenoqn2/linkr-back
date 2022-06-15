@@ -1,5 +1,5 @@
-import urlMetadata from 'url-metadata';
 
+import urlMetadata from 'url-metadata';
 import PostsRepository from '../repositories/PostsRepository.js';
 
 export async function getPosts(req, res) {
@@ -39,6 +39,27 @@ export async function getMetadata(req, res) {
   } catch (err) {
     res.status(500).send({
       message: 'Internal error while getting link metadata',
+      error: err,
+    });
+  }
+}
+
+export async function createPost(req, res) {
+  const { authorization } = req.headers;
+
+  try {
+    const { rows: results } = await PostsRepository.getUserIdByToken(
+      authorization
+    );
+    const [result] = results;
+    const id = result.userId;
+
+    await PostsRepository.createPost(req.body, id);
+
+    res.sendStatus(201);
+  } catch (err) {
+    res.status(500).send({
+      message: 'Internal error while creating post',
       error: err,
     });
   }
