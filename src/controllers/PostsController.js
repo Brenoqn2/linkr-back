@@ -1,6 +1,6 @@
-
 import urlMetadata from 'url-metadata';
 import PostsRepository from '../repositories/PostsRepository.js';
+import UserRepository from '../repositories/UserRepository.js';
 
 export async function getPosts(req, res) {
   const { page } = req.query;
@@ -46,13 +46,12 @@ export async function getMetadata(req, res) {
 
 export async function createPost(req, res) {
   const { authorization } = req.headers;
+  const token = authorization?.replace('Bearer ', '').trim();
 
   try {
-    const { rows: results } = await PostsRepository.getUserIdByToken(
-      authorization
-    );
+    const { rows: results } = await UserRepository.getUserByToken(token);
     const [result] = results;
-    const id = result.userId;
+    const { id } = result;
 
     await PostsRepository.createPost(req.body, id);
 
