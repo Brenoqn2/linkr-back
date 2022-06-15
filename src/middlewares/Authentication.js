@@ -33,6 +33,9 @@ export async function ValidateUserToken(req, res, next) {
       // se o token estiver expirado, então encerra a sessão
       AuthenticationRepository.EndSession(token);
       return res.status(401).send('token expired');
+
+      // observação aqui: quando encerrar a sessão o front deve deslogar o usuário e 
+      // redirecionar para a página de login
     }
 
     const expirationTime = 4 * 60 * 60 * 1000; // 4 horas
