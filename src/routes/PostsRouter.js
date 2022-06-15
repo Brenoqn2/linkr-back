@@ -5,6 +5,7 @@ import {
   getMetadata,
   createPost,
 } from '../controllers/PostsController.js';
+
 import validateSchema from '../middlewares/schemaValidator.js';
 import { postSchema } from '../schemas/post.js';
 
