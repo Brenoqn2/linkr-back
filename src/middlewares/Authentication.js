@@ -5,14 +5,14 @@ import {
 import AuthenticationRepository from '../repositories/Authentication.js';
 
 export async function PostSignupMiddleware(req, res, next) {
-  const { error } = PostSignupSchema.validate(req.body, { abortEarly: false });
+  const { error } = PostSignupSchema.validate(req.body, { abortEarly: true });
   if (error)
     return res.status(422).send(error.details.map((detail) => detail.message));
   next();
 }
 
 export async function PostSigninMiddleware(req, res, next) {
-  const { error } = PostSigninSchema.validate(req.body, { abortEarly: false });
+  const { error } = PostSigninSchema.validate(req.body, { abortEarly: true });
   if (error)
     return res.status(422).send(error.details.map((detail) => detail.message));
   next();
