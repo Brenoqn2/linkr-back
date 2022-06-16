@@ -4,8 +4,7 @@ import { TokenGenerator } from 'tk-generator';
 import AuthenticationRepository from '../repositories/Authentication.js';
 
 export async function PostSignupController(req, res) {
-  const defaultPicture = 'https://i.imgur.com/62ufJYt.jpeg';
-  const { name, email, password } = req.body;
+  const { name, email, password, avatar } = req.body;
 
   try {
     const ValidateEmail = await AuthenticationRepository.GetUserEmail(email);
@@ -16,7 +15,7 @@ export async function PostSignupController(req, res) {
     if (ValidateName.rowCount > 0)
       return res.status(422).send('this name has already been registered');
 
-    AuthenticationRepository.CreateUser(name, email, password, defaultPicture);
+    AuthenticationRepository.CreateUser(name, email, password, avatar);
     res.status(201).send('user created successfully');
   } catch (err) {
     return res
