@@ -2,12 +2,11 @@ import db from '../config/database.js';
 
 function getTrendingHashtags() {
   const ranking = db.query(`
-    SELECT name
-    FROM hashtags
-    JOIN "hashtagPosts" ON "hashtagPosts"."hashtagId" = hashtags.id
-    GROUP BY name
-    ORDER BY COUNT("hashtagPosts") DESC
-    LIMIT 10
+  SELECT name
+  FROM hashtags
+  GROUP BY name
+  ORDER BY COUNT(hashtags) DESC
+  LIMIT 10
   `);
   return ranking.rows;
 }
