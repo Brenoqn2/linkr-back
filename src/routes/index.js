@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import cors from 'cors';
 
 import PostsRouter from './PostsRouter.js';
 import AuthenticationRouter from './Authentication.js';
@@ -13,5 +14,6 @@ router.use(AuthenticationRouter);
 router.use(ValidateUserToken, HashtagsRouter);
 router.use(PostsRouter);
 router.use(UserRouter);
+router.use(cors());
 
 export default router;
