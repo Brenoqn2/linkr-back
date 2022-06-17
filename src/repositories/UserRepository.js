@@ -43,8 +43,16 @@ function getUserByPostId(postId) {
 function getUserPosts(id) {
   return db.query(
     `--sql
-      SELECT * FROM POSTS
-      WHERE "userId" = $1
+      SELECT 
+        POSTS.*, 
+        USERS.username, 
+        USERS.picture 
+      FROM POSTS
+      JOIN 
+        USERS ON USERS.id = POSTS."userId"
+      WHERE 
+        "userId" = $1
+      ORDER BY POSTS."createdAt" DESC
     `,
     [id]
   );
