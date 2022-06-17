@@ -63,9 +63,8 @@ export async function createPost(req, res) {
     for (let tag of hashtags) {
       tag = tag.replace('#', '').toLowerCase();
 
-      hashtagsRepository.addHashtag(tag, postId);
+      await hashtagsRepository.addHashtag(tag, postId);
     }
-
     res.sendStatus(201);
   } catch (err) {
     res.status(500).send({
@@ -77,26 +76,40 @@ export async function createPost(req, res) {
 
 export async function deletePost(req, res) {
   const { id } = req.params;
-  const { authorization } = req.headers;
-  const token = authorization?.replace('Bearer ', '').trim();
 
   try {
-    const resultUser = await UserRepository.getUserByToken(token);
-    const { id: userId } = resultUser.rows[0];
-
-    const resultPost = await UserRepository.getUserByPostId(id);
-    const { userId: userIdByPost } = resultPost.rows[0];
-
-    if (userId !== userIdByPost)
-      res.status(403).send('This post has other userId');
-
     await PostsRepository.deletePost(id);
     await hashtagsRepository.deleteHashtagByPostId(id);
 
     res.sendStatus(202);
   } catch (err) {
     res.status(500).send({
-      message: 'Internal error while creating post',
+      message: 'Internal error while deleting post',
+      error: err,
+    });
+  }
+}
+
+export async function editPost(req, res) {
+  const { id } = req.params;
+  const { body } = req;
+
+  const hashtags = body.content.match(/\B#\w\w+\b/g);
+
+  try {
+    await PostsRepository.editPost(body, id);
+    await hashtagsRepository.deleteHashtagByPostId(id);
+
+    // eslint-disable-next-line no-restricted-syntax
+    for (let tag of hashtags) {
+      tag = tag.replace('#', '').toLowerCase();
+
+      await hashtagsRepository.addHashtag(tag, id);
+    }
+    res.sendStatus(200);
+  } catch (err) {
+    res.status(500).send({
+      message: 'Internal error while editing post',
       error: err,
     });
   }
