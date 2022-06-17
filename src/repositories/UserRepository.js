@@ -15,8 +15,23 @@ function getUserByToken(token) {
   );
 }
 
+function UpdateUserAvatar(userId, avatar) {
+  return db.query(
+    `--sql
+      UPDATE 
+        users
+      SET 
+        picture = $2
+      WHERE 
+        id = $1
+    `,
+    [userId, avatar]
+  );
+}
+
 const UserRepository = {
   getUserByToken,
+  UpdateUserAvatar,
 };
 
 export default UserRepository;

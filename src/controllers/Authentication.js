@@ -57,3 +57,21 @@ export async function PostSigninController(req, res) {
       .send(`Error accessing database during PostSigninController.\n${err}`);
   }
 }
+
+export async function LogoutUserController(req, res) {
+
+  try {
+
+    const { authorization } = req.headers;
+    const token = authorization ? authorization.replace('Bearer ', '') : null;
+    if (!token) return res.status(401).send('token not provided');
+
+    await AuthenticationRepository.EndSession(token);
+    res.status(200).send('logout successfully');
+
+  } catch (err) {
+    return res
+      .status(500)
+      .send(`Error accessing database during LogoutUserController.\n${err}`);
+  }
+}

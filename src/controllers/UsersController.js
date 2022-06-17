@@ -17,3 +17,30 @@ export async function getUserData(req, res) {
     });
   }
 }
+
+export async function ChangeUserAvatarController(req, res) {
+
+  const { authorization } = req.headers;
+  const token = authorization?.replace('Bearer ', '').trim();
+
+  const GetUserByToken = await UserRepository.getUserByToken(token);
+  if(GetUserByToken.rowCount === 0) return console.log('User not found');
+
+  const userId = GetUserByToken.rows[0].id;
+  const avatar = req.body.avatar;
+
+  if(!avatar) return res.status(400).send('avatar not provided');
+
+  try {
+    
+    await UserRepository.UpdateUserAvatar(userId, avatar);
+    res.sendStatus(200);
+
+  } catch (err) {
+    res.status(500).send({
+      message: 'Internal error while changing user avatar',
+      error: err,
+    });
+  }
+
+}
