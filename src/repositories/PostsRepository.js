@@ -49,11 +49,23 @@ function deletePost(postId) {
   );
 }
 
+function editPost(body, postId) {
+  const { link, content } = body;
+  return db.query(
+    `UPDATE posts
+    SET link = $1, content = $2
+    WHERE id = $3
+    `,
+    [link, content, postId]
+  );
+}
+
 const PostsRepository = {
   getAllPosts,
   getPostById,
   createPost,
   deletePost,
+  editPost,
 };
 
 export default PostsRepository;
