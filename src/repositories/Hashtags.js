@@ -1,6 +1,6 @@
 import db from '../config/database.js';
 
-async function getTrendingHashtags() {
+function getTrendingHashtags() {
   const ranking = db.query(`
     SELECT name
     FROM hashtags
@@ -12,23 +12,44 @@ async function getTrendingHashtags() {
   return ranking.rows;
 }
 
-async function getHashtagPosts(hashtag) {
-  const posts = db.query(
-    `
-    SELECT *
-    FROM posts
-    JOIN "hashtagPosts" ON "hashtagPosts"."postId" = posts.id
-    WHERE "hashtagPosts"."hashtagId" = (
-        SELECT id
-        FROM hashtags
-        WHERE name = $1
-    )
-    ORDER BY posts."createdAt" DESC
+function getHashtagPosts(hashtag) {
+  return db.query(
+    `--sql
+      SELECT POSTS.*, USERS.username, USERS.picture FROM HASHTAGS
+      JOIN POSTS ON POSTS.id = HASHTAGS."postId"
+      JOIN USERS ON USERS.id = POSTS."userId"
+      WHERE HASHTAGS.name = $1
+      ORDER BY POSTS."createdAt" DESC
     `,
     [hashtag]
   );
-  return posts.rows;
 }
 
-const hashtagsRepository = { getTrendingHashtags, getHashtagPosts };
+function getHashtag(hashtag) {
+  return db.query(
+    `--sql
+      SELECT * FROM HASHTAGS
+      WHERE name = $1
+    `,
+    [hashtag]
+  );
+}
+
+function addHashtag(hashtag, postId) {
+  return db.query(
+    `--sql
+      INSERT INTO HASHTAGS (name, "postId")
+      VALUES ($1, $2)
+      ON CONFLICT (name, "postId") DO NOTHING
+    `,
+    [hashtag, postId]
+  );
+}
+
+const hashtagsRepository = {
+  getTrendingHashtags,
+  getHashtagPosts,
+  getHashtag,
+  addHashtag,
+};
 export default hashtagsRepository;

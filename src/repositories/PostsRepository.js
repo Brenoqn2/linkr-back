@@ -25,7 +25,8 @@ function getPostById(id) {
       SELECT * FROM POSTS
       WHERE id = $1
     `,
-    [id])
+    [id]
+  );
 }
 
 function createPost(body, userId) {
@@ -33,6 +34,7 @@ function createPost(body, userId) {
   return db.query(
     `INSERT INTO posts ("userId", link, content) 
     VALUES ($1, $2, $3)
+    RETURNING id
     `,
     [userId, link, content]
   );
@@ -41,7 +43,7 @@ function createPost(body, userId) {
 const PostsRepository = {
   getAllPosts,
   getPostById,
-  createPost
+  createPost,
 };
 
 export default PostsRepository;

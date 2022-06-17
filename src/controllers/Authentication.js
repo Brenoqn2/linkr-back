@@ -50,7 +50,7 @@ export async function PostSigninController(req, res) {
       ValidateEmail.rows[0].id,
       expiration
     );
-    res.status(200).send({token});
+    res.status(200).send({ token });
   } catch (err) {
     return res
       .status(500)
