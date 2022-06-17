@@ -40,10 +40,20 @@ function createPost(body, userId) {
   );
 }
 
+function deletePost(postId) {
+  return db.query(
+    `DELETE FROM posts
+    WHERE id = $1
+    `,
+    [postId]
+  );
+}
+
 const PostsRepository = {
   getAllPosts,
   getPostById,
   createPost,
+  deletePost,
 };
 
 export default PostsRepository;

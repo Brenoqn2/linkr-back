@@ -28,10 +28,21 @@ function UpdateUserAvatar(userId, avatar) {
     [userId, avatar]
   );
 }
+function getUserByPostId(postId) {
+  return db.query(
+    `--sql
+      SELECT p."userId"
+      FROM posts p 
+      WHERE p.id = $1
+    `,
+    [postId]
+  );
+}
 
 const UserRepository = {
   getUserByToken,
   UpdateUserAvatar,
+  getUserByPostId,
 };
 
 export default UserRepository;

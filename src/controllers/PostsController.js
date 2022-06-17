@@ -74,3 +74,30 @@ export async function createPost(req, res) {
     });
   }
 }
+
+export async function deletePost(req, res) {
+  const { id } = req.params;
+  const { authorization } = req.headers;
+  const token = authorization?.replace('Bearer ', '').trim();
+
+  try {
+    const resultUser = await UserRepository.getUserByToken(token);
+    const { id: userId } = resultUser.rows[0];
+
+    const resultPost = await UserRepository.getUserByPostId(id);
+    const { userId: userIdByPost } = resultPost.rows[0];
+
+    if (userId !== userIdByPost)
+      res.status(403).send('This post has other userId');
+
+    await PostsRepository.deletePost(id);
+    await hashtagsRepository.deleteHashtagByPostId(id);
+
+    res.sendStatus(202);
+  } catch (err) {
+    res.status(500).send({
+      message: 'Internal error while creating post',
+      error: err,
+    });
+  }
+}
