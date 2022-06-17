@@ -1,12 +1,12 @@
 import db from '../config/database.js';
 
-function getTrendingHashtags() {
-  const ranking = db.query(`
-  SELECT name
-  FROM hashtags
-  GROUP BY name
-  ORDER BY COUNT(hashtags) DESC
-  LIMIT 10
+async function getTrendingHashtags() {
+  const ranking = await db.query(`
+    SELECT name
+    FROM hashtags
+    GROUP BY name
+    ORDER BY COUNT(hashtags) DESC
+    LIMIT 10
   `);
   return ranking.rows;
 }
