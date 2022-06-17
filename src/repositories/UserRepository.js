@@ -28,6 +28,7 @@ function UpdateUserAvatar(userId, avatar) {
     [userId, avatar]
   );
 }
+
 function getUserByPostId(postId) {
   return db.query(
     `--sql
@@ -39,10 +40,21 @@ function getUserByPostId(postId) {
   );
 }
 
+function getUserPosts(id) {
+  return db.query(
+    `--sql
+      SELECT * FROM POSTS
+      WHERE "userId" = $1
+    `,
+    [id]
+  );
+}
+
 const UserRepository = {
   getUserByToken,
   UpdateUserAvatar,
   getUserByPostId,
+  getUserPosts,
 };
 
 export default UserRepository;
