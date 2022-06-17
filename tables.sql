@@ -42,3 +42,10 @@ CREATE TABLE likes(
     "postId" INTEGER REFERENCES "posts"("id"),
     "createdAt" TIMESTAMP DEFAULT NOW()
 )
+
+CREATE TABLE hashtags (
+    "id" SERIAL PRIMARY KEY,
+    "postId" INTEGER NOT NULL REFERENCES posts("id"),
+    "name" TEXT NOT NULL,
+    UNIQUE ("name", "postId")
+)
