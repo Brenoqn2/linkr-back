@@ -45,10 +45,21 @@ function addHashtag(hashtag, postId) {
   );
 }
 
+function deleteHashtagByPostId(postId) {
+  return db.query(
+    `--sql
+      DELETE FROM hashtags 
+      WHERE "postId" = $1
+    `,
+    [postId]
+  );
+}
+
 const hashtagsRepository = {
   getTrendingHashtags,
   getHashtagPosts,
   getHashtag,
   addHashtag,
+  deleteHashtagByPostId,
 };
 export default hashtagsRepository;

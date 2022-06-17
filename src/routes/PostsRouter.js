@@ -4,6 +4,7 @@ import {
   getPosts,
   getMetadata,
   createPost,
+  deletePost,
 } from '../controllers/PostsController.js';
 
 import validateSchema from '../middlewares/schemaValidator.js';
@@ -14,5 +15,6 @@ const PostsRouter = Router();
 PostsRouter.get('/posts', getPosts);
 PostsRouter.get('/posts/:id/metadata', getMetadata);
 PostsRouter.post('/post', validateSchema(postSchema), createPost);
+PostsRouter.delete('/post/:id', deletePost);
 
 export default PostsRouter;
