@@ -78,8 +78,8 @@ export async function deletePost(req, res) {
   const { id } = req.params;
 
   try {
-    await PostsRepository.deletePost(id);
     await hashtagsRepository.deleteHashtagByPostId(id);
+    await PostsRepository.deletePost(id);
 
     res.sendStatus(202);
   } catch (err) {
@@ -97,8 +97,8 @@ export async function editPost(req, res) {
   const hashtags = body.content.match(/\B#\w\w+\b/g);
 
   try {
-    await PostsRepository.editPost(body, id);
     await hashtagsRepository.deleteHashtagByPostId(id);
+    await PostsRepository.editPost(body, id);
 
     // eslint-disable-next-line no-restricted-syntax
     for (let tag of hashtags) {
