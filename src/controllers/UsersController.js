@@ -55,3 +55,19 @@ export async function getUserPosts(req, res) {
     });
   }
 }
+
+export async function getUsers(req, res) {
+  const { name } = req.query;
+
+  try {
+    const result = await UserRepository.getUsersByName(name);
+    const { rows: users } = result;
+
+    res.status(200).send(users);
+  } catch (err) {
+    res.status(500).send({
+      message: 'Internal error while getting users',
+      error: err,
+    });
+  }
+}
