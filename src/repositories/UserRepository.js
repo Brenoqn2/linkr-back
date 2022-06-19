@@ -58,11 +58,24 @@ function getUserPosts(id) {
   );
 }
 
+function getUsersByName(name) {
+  name += '%';
+  console.log(name);
+  return db.query(
+    `--sql
+      SELECT USERS.username, USERS.id, USERS.picture FROM USERS
+      WHERE username ILIKE $1
+    `,
+    [name]
+  );
+}
+
 const UserRepository = {
   getUserByToken,
   UpdateUserAvatar,
   getUserByPostId,
   getUserPosts,
+  getUsersByName,
 };
 
 export default UserRepository;

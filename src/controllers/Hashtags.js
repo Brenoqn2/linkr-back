@@ -24,7 +24,6 @@ export async function getHashtagPosts(req, res) {
 }
 
 export async function createHashtag(req, res) {
-  // TODO VERIFICAR SE A HASHTAG JA EXISTE, SE SIM
   const { name } = req.body;
 
   try {
