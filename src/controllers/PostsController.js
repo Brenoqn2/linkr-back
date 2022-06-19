@@ -2,6 +2,7 @@ import urlMetadata from 'url-metadata';
 import PostsRepository from '../repositories/PostsRepository.js';
 import UserRepository from '../repositories/UserRepository.js';
 import hashtagsRepository from '../repositories/Hashtags.js';
+import LikesRepository from '../repositories/LikesRepository.js';
 
 export async function getPosts(req, res) {
   const { page } = req.query;
@@ -79,6 +80,7 @@ export async function deletePost(req, res) {
 
   try {
     await hashtagsRepository.deleteHashtagByPostId(id);
+    await LikesRepository.deleteLikesFromPost(id);
     await PostsRepository.deletePost(id);
 
     res.sendStatus(202);
