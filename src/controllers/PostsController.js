@@ -60,12 +60,15 @@ export async function createPost(req, res) {
     const resultPost = await PostsRepository.createPost(body, userId);
     const { id: postId } = resultPost.rows[0];
 
-    // eslint-disable-next-line no-restricted-syntax
-    for (let tag of hashtags) {
-      tag = tag.replace('#', '').toLowerCase();
+    if (hashtags) {
+      // eslint-disable-next-line no-restricted-syntax
+      for (let tag of hashtags) {
+        tag = tag.replace('#', '').toLowerCase();
 
-      await hashtagsRepository.addHashtag(tag, postId);
+        await hashtagsRepository.addHashtag(tag, postId);
+      }
     }
+
     res.sendStatus(201);
   } catch (err) {
     res.status(500).send({
@@ -95,18 +98,19 @@ export async function deletePost(req, res) {
 export async function editPost(req, res) {
   const { id } = req.params;
   const { body } = req;
-
   const hashtags = body.content.match(/\B#\w\w+\b/g);
 
   try {
     await hashtagsRepository.deleteHashtagByPostId(id);
     await PostsRepository.editPost(body, id);
 
-    // eslint-disable-next-line no-restricted-syntax
-    for (let tag of hashtags) {
-      tag = tag.replace('#', '').toLowerCase();
+    if (hashtags) {
+      // eslint-disable-next-line no-restricted-syntax
+      for (let tag of hashtags) {
+        tag = tag.replace('#', '').toLowerCase();
 
-      await hashtagsRepository.addHashtag(tag, id);
+        await hashtagsRepository.addHashtag(tag, id);
+      }
     }
     res.sendStatus(200);
   } catch (err) {
