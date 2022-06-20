@@ -60,12 +60,15 @@ export async function createPost(req, res) {
     const resultPost = await PostsRepository.createPost(body, userId);
     const { id: postId } = resultPost.rows[0];
 
-    // eslint-disable-next-line no-restricted-syntax
-    for (let tag of hashtags) {
-      tag = tag.replace('#', '').toLowerCase();
+    if (hashtags) {
+      // eslint-disable-next-line no-restricted-syntax
+      for (let tag of hashtags) {
+        tag = tag.replace('#', '').toLowerCase();
 
-      await hashtagsRepository.addHashtag(tag, postId);
+        await hashtagsRepository.addHashtag(tag, postId);
+      }
     }
+
     res.sendStatus(201);
   } catch (err) {
     res.status(500).send({
