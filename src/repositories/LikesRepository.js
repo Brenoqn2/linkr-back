@@ -53,11 +53,22 @@ async function GetUserNameAsLikedThisPost(postId) {
   return result.rows;
 }
 
+function deleteLikesFromPost(postId) {
+  return db.query(
+    `--sql
+      DELETE FROM LIKES
+      WHERE "postId" = $1    
+    `,
+    [postId]
+  );
+}
+
 const LikesRepository = {
   LikeThisPost,
   UnlikeThisPost,
   GetLikes,
-  GetUserNameAsLikedThisPost
+  GetUserNameAsLikedThisPost,
+  deleteLikesFromPost,
 };
 
 export default LikesRepository;
