@@ -43,3 +43,10 @@ CREATE TABLE comments (
     "postId" INTEGER NOT NULL REFERENCES posts("id"),
     "content" TEXT NOT NULL
 )
+
+CREATE TABLE "followers" (
+	"id" SERIAL PRIMARY KEY,
+	"followerId" INT NOT NULL REFERENCES "users"("id"),
+    "followingId" INT NOT NULL REFERENCES "users"("id"),
+    "createdAt" TIMESTAMP DEFAULT NOW()
+);
