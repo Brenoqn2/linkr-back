@@ -60,12 +60,58 @@ function editPost(body, postId) {
   );
 }
 
+function getComments(postId) {
+  return db.query(
+    `--sql
+      SELECT C.*,
+        U.USERNAME,
+        U.PICTURE,
+        (CASE WHEN C."userId" = P."userId" THEN true ELSE false END) AS "isAuthor"
+      FROM COMMENTS C
+      JOIN USERS U ON C."userId" = U.ID
+      JOIN POSTS P ON C."postId" = P.ID
+      WHERE C."postId" = $1
+    `,
+    [postId]
+  );
+}
+
+function getCommentById(commentId) {
+  return db.query(
+    `--sql
+      SELECT C.*,
+        U.USERNAME,
+        U.PICTURE,
+        (CASE WHEN C."userId" = P."userId" THEN true ELSE false END) AS "isAuthor"
+      FROM COMMENTS C
+      JOIN USERS U ON C."userId" = U.ID
+      JOIN POSTS P ON C."postId" = P.ID
+      WHERE C.ID = $1
+    `,
+    [commentId]
+  );
+}
+
+function postComment(postId, userId, content) {
+  return db.query(
+    `--sql
+      INSERT INTO COMMENTS ("postId", "userId", content)
+      VALUES ($1, $2, $3)
+      RETURNING id
+    `,
+    [postId, userId, content]
+  );
+}
+
 const PostsRepository = {
   getAllPosts,
   getPostById,
   createPost,
   deletePost,
   editPost,
+  getComments,
+  getCommentById,
+  postComment,
 };
 
 export default PostsRepository;

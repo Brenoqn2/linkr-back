@@ -15,6 +15,16 @@ function getUserByToken(token) {
   );
 }
 
+function getUserById(id) {
+  return db.query(
+    `--sql
+      SELECT * FROM USERS
+      WHERE id = $1
+    `,
+    [id]
+  );
+}
+
 function UpdateUserAvatar(userId, avatar) {
   return db.query(
     `--sql
@@ -59,8 +69,7 @@ function getUserPosts(id) {
 }
 
 function getUsersByName(name) {
-  name += '%';
-  console.log(name);
+  name += '%'; // eslint-disable-line
   return db.query(
     `--sql
       SELECT USERS.username, USERS.id, USERS.picture FROM USERS
@@ -72,6 +81,7 @@ function getUsersByName(name) {
 
 const UserRepository = {
   getUserByToken,
+  getUserById,
   UpdateUserAvatar,
   getUserByPostId,
   getUserPosts,
