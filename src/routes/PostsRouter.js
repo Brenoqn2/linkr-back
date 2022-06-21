@@ -16,6 +16,7 @@ const PostsRouter = Router();
 
 PostsRouter.get('/posts', getPosts);
 PostsRouter.get('/posts/:id/metadata', getMetadata);
+PostsRouter.get('/post/:id/comments');
 PostsRouter.post('/post', validateSchema(postSchema), createPost);
 PostsRouter.delete('/post/:id', validatePostIdUserId, deletePost);
 PostsRouter.put(

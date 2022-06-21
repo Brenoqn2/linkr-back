@@ -60,12 +60,30 @@ function editPost(body, postId) {
   );
 }
 
+function getComments(postId) {
+  return db.query(
+    `--sql
+      SELECT 
+        c.*, 
+        u.username, 
+        u.picture 
+      FROM 
+        comments c
+      JOIN 
+        users u ON c."userId" = u.id
+      WHERE c."postId" = $1
+    `,
+    [postId]
+  );
+}
+
 const PostsRepository = {
   getAllPosts,
   getPostById,
   createPost,
   deletePost,
   editPost,
+  getComments,
 };
 
 export default PostsRepository;

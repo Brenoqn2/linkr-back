@@ -23,19 +23,6 @@ CREATE TABLE posts(
     "createdAt" TIMESTAMP DEFAULT NOW()
 )
 
-CREATE TABLE hashtags(
-    "id" SERIAL PRIMARY KEY,
-    "name" TEXT NOT NULL UNIQUE,
-    "createdAt" TIMESTAMP DEFAULT NOW()
-)
-
-CREATE TABLE "hashtagPosts"(
-    "id" SERIAL PRIMARY KEY,
-    "postId" INTEGER REFERENCES "posts"("id"),
-    "hashtagId" INTEGER REFERENCES "hashtags"("id"),
-    "createdAt" TIMESTAMP DEFAULT NOW()
-)
-
 CREATE TABLE likes(
     "id" SERIAL PRIMARY KEY,
     "userId" INTEGER REFERENCES "users"("id"),
@@ -48,4 +35,11 @@ CREATE TABLE hashtags (
     "postId" INTEGER NOT NULL REFERENCES posts("id"),
     "name" TEXT NOT NULL,
     UNIQUE ("name", "postId")
+)
+
+CREATE TABLE comments (
+    "id" SERIAL PRIMARY KEY,
+    "userId" INTEGER NOT NULL REFERENCES users("id"),
+    "postId" INTEGER NOT NULL REFERENCES posts("id"),
+    "content" TEXT NOT NULL
 )

@@ -120,3 +120,12 @@ export async function editPost(req, res) {
     });
   }
 }
+
+export async function getComments(req, res) {
+  const { id: postId } = req.params;
+
+  const result = await PostsRepository.getComments(postId);
+  const { rows: comments } = result;
+
+  res.status(200).send(comments);
+}
