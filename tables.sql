@@ -49,3 +49,10 @@ CREATE TABLE hashtags (
     "name" TEXT NOT NULL,
     UNIQUE ("name", "postId")
 )
+
+CREATE TABLE "followers" (
+	"id" SERIAL PRIMARY KEY,
+	"followerId" INT NOT NULL REFERENCES "users"("id"),
+    "followingId" INT NOT NULL REFERENCES "users"("id"),
+    "createdAt" TIMESTAMP DEFAULT NOW()
+);
