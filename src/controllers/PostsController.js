@@ -122,10 +122,6 @@ export async function editPost(req, res) {
 
 export async function getComments(req, res) {
   const { id: postId } = req.params;
-  console.log(
-    '🚀 ~ file: PostsController.js ~ line 126 ~ getComments ~ postId',
-    postId
-  );
 
   const result = await PostsRepository.getComments(postId);
   const { rows: comments } = result;
@@ -137,9 +133,15 @@ export async function createComment(req, res) {
   const { userId, postId, content } = req.body;
 
   try {
-    await PostsRepository.postComment(postId, userId, content);
-    res.status(201).send('created');
+    const result = await PostsRepository.postComment(postId, userId, content);
+    const { id: commentId } = result.rows[0];
+
+    const commentResult = await PostsRepository.getCommentById(commentId);
+    const [comment] = commentResult.rows;
+
+    res.status(201).send(comment);
   } catch (err) {
+    console.log(err);
     res.status(500).send({
       message: 'Internal error while creating comment',
       error: err,
