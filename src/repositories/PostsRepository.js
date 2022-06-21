@@ -77,6 +77,16 @@ function getComments(postId) {
   );
 }
 
+function postComment(postId, userId, content) {
+  return db.query(
+    `--sql
+      INSERT INTO COMMENTS ("postId", "userId", content)
+      VALUES ($1, $2, $3)
+    `,
+    [postId, userId, content]
+  );
+}
+
 const PostsRepository = {
   getAllPosts,
   getPostById,
@@ -84,6 +94,7 @@ const PostsRepository = {
   deletePost,
   editPost,
   getComments,
+  postComment,
 };
 
 export default PostsRepository;

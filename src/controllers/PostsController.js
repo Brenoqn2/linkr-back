@@ -26,7 +26,6 @@ export async function getMetadata(req, res) {
 
   try {
     const result = await PostsRepository.getPostById(id);
-    console.log(result.rows);
 
     if (!result.rows.length) {
       res.status(404).send('Post not found');
@@ -123,9 +122,27 @@ export async function editPost(req, res) {
 
 export async function getComments(req, res) {
   const { id: postId } = req.params;
+  console.log(
+    '🚀 ~ file: PostsController.js ~ line 126 ~ getComments ~ postId',
+    postId
+  );
 
   const result = await PostsRepository.getComments(postId);
   const { rows: comments } = result;
 
   res.status(200).send(comments);
+}
+
+export async function createComment(req, res) {
+  const { userId, postId, content } = req.body;
+
+  try {
+    await PostsRepository.postComment(postId, userId, content);
+    res.status(201).send('created');
+  } catch (err) {
+    res.status(500).send({
+      message: 'Internal error while creating comment',
+      error: err,
+    });
+  }
 }
