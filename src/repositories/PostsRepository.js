@@ -103,6 +103,17 @@ function postComment(postId, userId, content) {
   );
 }
 
+function postRepost(postId, userId) {
+  return db.query(
+    `--sql
+      INSERT INTO reposts ("postId", "userId")
+      VALUES ($1, $2)
+      RETURNING id
+    `,
+    [postId, userId]
+  );
+}
+
 const PostsRepository = {
   getAllPosts,
   getPostById,
@@ -112,6 +123,7 @@ const PostsRepository = {
   getComments,
   getCommentById,
   postComment,
+  postRepost,
 };
 
 export default PostsRepository;

@@ -148,3 +148,21 @@ export async function createComment(req, res) {
     });
   }
 }
+
+export async function createRepost(req, res) {
+  const { postId, userRepostId } = req.body;
+  try {
+    const result = await PostsRepository.postRepost(postId, userRepostId);
+    const { id: repostId } = result.rows[0];
+
+    // const commentResult = await PostsRepository.getCommentById(repostId);
+    // const [comment] = commentResult.rows;
+
+    res.status(201).send(repostId);
+  } catch (err) {
+    res.status(500).send({
+      message: 'Internal error while creating repost',
+      error: err,
+    });
+  }
+}

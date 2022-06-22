@@ -8,6 +8,7 @@ import {
   editPost,
   getComments,
   createComment,
+  createRepost,
 } from '../controllers/PostsController.js';
 
 import { validatePostIdUserId } from '../middlewares/Authentication.js';
@@ -30,5 +31,6 @@ PostsRouter.put(
   validatePostIdUserId,
   editPost
 );
+PostsRouter.post('/repost', createRepost);
 
 export default PostsRouter;
