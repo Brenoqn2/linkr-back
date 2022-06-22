@@ -62,9 +62,9 @@ export async function getUserPosts(req, res) {
 
 export async function getUsers(req, res) {
   const { name } = req.query;
-
+  const { userId } = res.locals;
   try {
-    const result = await UserRepository.getUsersByName(name);
+    const result = await UserRepository.getUsersByName(name, userId);
     const { rows: users } = result;
 
     res.status(200).send(users);
