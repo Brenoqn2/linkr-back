@@ -131,6 +131,12 @@ export async function getComments(req, res) {
 
 export async function createComment(req, res) {
   const { userId, postId, content } = req.body;
+  const { userId: userIdFromToken } = res.locals;
+
+  if (userId !== userIdFromToken) {
+    res.status(409).send('Forbbiden');
+    return;
+  }
 
   try {
     const result = await PostsRepository.postComment(postId, userId, content);

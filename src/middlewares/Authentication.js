@@ -44,6 +44,7 @@ export async function ValidateUserToken(req, res, next) {
     const expiration = currentTime + expirationTime;
 
     AuthenticationRepository.UpdateTokenExpiration(token, expiration);
+    res.locals.userId = ValidateToken.rows[0].userId;
     next();
   } catch (err) {
     return res
