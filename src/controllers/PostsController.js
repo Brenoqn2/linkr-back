@@ -154,3 +154,39 @@ export async function createComment(req, res) {
     });
   }
 }
+
+export async function createRepost(req, res) {
+  const { postId } = req.params;
+  const { userRepostId } = req.body;
+  try {
+    await PostsRepository.postRepost(postId, userRepostId);
+    console.log(postId, userRepostId);
+    // const { id: repostId } = result.rows[0];
+
+    return res.status(201).send('foi');
+  } catch (err) {
+    res.status(500).send(`${err}`);
+  }
+}
+
+export async function countReposts(req, res) {
+  const { postId } = req.params;
+
+  try {
+    const result = await PostsRepository.getReposts(postId);
+    const { rowCount: reposts } = result;
+    if (reposts === 0)
+      return res
+        .status(500)
+        .send(`Error during getting reposts count from postId: ${postId}`);
+
+    res
+      .send({
+        postId,
+        reposts,
+      })
+      .status(200);
+  } catch (err) {
+    res.status(500).send(`Error during getting reposts: ${err}`);
+  }
+}
