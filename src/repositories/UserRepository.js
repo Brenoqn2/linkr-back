@@ -68,14 +68,21 @@ function getUserPosts(id) {
   );
 }
 
-function getUsersByName(name) {
+function getUsersByName(name, userId) {
   name += '%'; // eslint-disable-line
   return db.query(
     `--sql
-      SELECT USERS.username, USERS.id, USERS.picture FROM USERS
-      WHERE username ILIKE $1
+      SELECT 
+        USERS.USERNAME,
+        USERS.ID,
+        (CASE WHEN F."followerId" = $1 THEN true ELSE false END) AS "isFollowing",
+        USERS.PICTURE
+      FROM USERS
+      LEFT JOIN FOLLOWERS F ON F."followingId" = USERS.ID AND F."followerId" = $1 
+      WHERE USERNAME ILIKE $2
+      ORDER BY "isFollowing" DESC, username
     `,
-    [name]
+    [userId, name]
   );
 }
 
