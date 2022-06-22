@@ -1,6 +1,10 @@
 import { Router } from 'express';
 
-import { LikePostController, UnlikePostController, GetLikesController } from '../controllers/Likes.js';
+import {
+  LikePostController,
+  UnlikePostController,
+  GetLikesController,
+} from '../controllers/Likes.js';
 
 const LikesRouter = Router();
 

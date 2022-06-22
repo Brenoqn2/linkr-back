@@ -50,3 +50,10 @@ CREATE TABLE "followers" (
     "followingId" INT NOT NULL REFERENCES "users"("id"),
     "createdAt" TIMESTAMP DEFAULT NOW()
 );
+
+CREATE TABLE "reposts" (
+	"id" SERIAL PRIMARY KEY,
+	"postId" INT NOT NULL REFERENCES "posts"("id"),
+    "userRepostId" INT NOT NULL REFERENCES "users"("id"),
+    "createdAt" TIMESTAMP DEFAULT NOW()
+);

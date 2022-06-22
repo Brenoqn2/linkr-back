@@ -103,14 +103,26 @@ function postComment(postId, userId, content) {
   );
 }
 
-function postRepost(postId, userId) {
+function postRepost(postId, userRepostId) {
+  // console.log(postId, userRepostId);
+
   return db.query(
     `--sql
-      INSERT INTO reposts ("postId", "userId")
+      INSERT INTO reposts ("postId", "userRepostId")
       VALUES ($1, $2)
-      RETURNING id
     `,
-    [postId, userId]
+    [postId, userRepostId]
+  );
+}
+
+async function getReposts(postId) {
+  return db.query(
+    `--sql
+      SELECT *
+      FROM reposts
+      WHERE "postId" = $1
+    `,
+    [postId]
   );
 }
 
@@ -124,6 +136,7 @@ const PostsRepository = {
   getCommentById,
   postComment,
   postRepost,
+  getReposts,
 };
 
 export default PostsRepository;

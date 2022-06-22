@@ -156,19 +156,37 @@ export async function createComment(req, res) {
 }
 
 export async function createRepost(req, res) {
-  const { postId, userRepostId } = req.body;
+  const { postId } = req.params;
+  const { userRepostId } = req.body;
   try {
-    const result = await PostsRepository.postRepost(postId, userRepostId);
-    const { id: repostId } = result.rows[0];
+    await PostsRepository.postRepost(postId, userRepostId);
+    console.log(postId, userRepostId);
+    // const { id: repostId } = result.rows[0];
 
-    // const commentResult = await PostsRepository.getCommentById(repostId);
-    // const [comment] = commentResult.rows;
-
-    res.status(201).send(repostId);
+    return res.status(201).send('foi');
   } catch (err) {
-    res.status(500).send({
-      message: 'Internal error while creating repost',
-      error: err,
-    });
+    res.status(500).send(`${err}`);
+  }
+}
+
+export async function countReposts(req, res) {
+  const { postId } = req.params;
+
+  try {
+    const result = await PostsRepository.getReposts(postId);
+    const { rowCount: reposts } = result;
+    if (reposts === 0)
+      return res
+        .status(500)
+        .send(`Error during getting reposts count from postId: ${postId}`);
+
+    res
+      .send({
+        postId,
+        reposts,
+      })
+      .status(200);
+  } catch (err) {
+    res.status(500).send(`Error during getting reposts: ${err}`);
   }
 }
