@@ -1,3 +1,4 @@
+import FollowRepository from '../repositories/Follow.js';
 import UserRepository from '../repositories/UserRepository.js';
 
 export async function getUserData(req, res) {
@@ -5,11 +6,14 @@ export async function getUserData(req, res) {
   const token = authorization?.replace('Bearer ', '').trim();
 
   try {
-    const { rows: results } = await UserRepository.getUserByToken(token);
-    const [result] = results;
-    delete result.password;
+    const { rows: result } = await UserRepository.getUserByToken(token);
+    const [user] = result;
+    delete user.password;
 
-    res.status(200).send(result);
+    const { rows: following } = await FollowRepository.getFollowing(user.id);
+    user.followingIds = following.map((follow) => follow.followingId);
+
+    res.status(200).send(user);
   } catch (err) {
     res.status(500).send({
       message: 'Internal error while getting user data',
