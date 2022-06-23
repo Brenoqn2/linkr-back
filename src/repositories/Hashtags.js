@@ -11,7 +11,9 @@ async function getTrendingHashtags() {
   return ranking.rows;
 }
 
-function getHashtagPosts(hashtag) {
+function getHashtagPosts(hashtag, page) {
+  let offset = page ? (page - 1) * 10 : 0;
+  if (offset < 0) offset = 0;
   return db.query(
     `--sql
       SELECT POSTS.*, USERS.username, USERS.picture FROM HASHTAGS
@@ -19,8 +21,10 @@ function getHashtagPosts(hashtag) {
       JOIN USERS ON USERS.id = POSTS."userId"
       WHERE HASHTAGS.name = $1
       ORDER BY POSTS."createdAt" DESC
+      OFFSET $2
+      LIMIT 10
     `,
-    [hashtag]
+    [hashtag, offset]
   );
 }
 
