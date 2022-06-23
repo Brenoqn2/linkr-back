@@ -12,14 +12,37 @@ export async function getTrendingHashtags(req, res) {
 
 export async function getHashtagPosts(req, res) {
   const { hashtag } = req.params;
+  const { page } = req.query;
   try {
-    const result = await hashtagsRepository.getHashtagPosts(hashtag);
+    const result = await hashtagsRepository.getHashtagPosts(hashtag, page);
     const { rows: posts } = result;
     console.log(posts);
     return res.status(200).send(posts);
   } catch (err) {
     console.log(err);
     return res.status(404).send(err);
+  }
+}
+
+export async function checkMorePosts(req, res) {
+  const { page } = req.query;
+  const { hashtag } = req.params;
+  let posts = [];
+
+  try {
+    const result = await hashtagsRepository.getHashtagPosts(hashtag, page);
+    posts = result.rows;
+
+    if (posts.length > 0) {
+      res.status(200).send(true);
+    } else {
+      res.status(200).send(false);
+    }
+  } catch (err) {
+    res.status(500).send({
+      message: 'Internal error while getting posts',
+      error: err,
+    });
   }
 }
 

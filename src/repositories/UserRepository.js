@@ -50,7 +50,10 @@ function getUserByPostId(postId) {
   );
 }
 
-function getUserPosts(id) {
+function getUserPosts(id, page) {
+  let offset = page ? (page - 1) * 10 : 0;
+  if (offset < 0) offset = 0;
+
   return db.query(
     `--sql
       SELECT 
@@ -63,8 +66,10 @@ function getUserPosts(id) {
       WHERE 
         "userId" = $1
       ORDER BY POSTS."createdAt" DESC
+      OFFSET $2
+      LIMIT 10
     `,
-    [id]
+    [id, offset]
   );
 }
 

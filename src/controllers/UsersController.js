@@ -47,14 +47,37 @@ export async function ChangeUserAvatarController(req, res) {
 
 export async function getUserPosts(req, res) {
   const { id } = req.params;
+  const { page } = req.query;
 
   try {
-    const result = await UserRepository.getUserPosts(id);
+    const result = await UserRepository.getUserPosts(id, page);
     const { rows: posts } = result;
     res.status(200).send(posts);
   } catch (err) {
     res.status(500).send({
       message: 'Internal error while getting user posts',
+      error: err,
+    });
+  }
+}
+
+export async function checkMorePosts(req, res) {
+  const { id } = req.params;
+  const { page } = req.query;
+  let posts = [];
+
+  try {
+    const result = await UserRepository.getUserPosts(id, page);
+    posts = result.rows;
+
+    if (posts.length > 0) {
+      res.status(200).send(true);
+    } else {
+      res.status(200).send(false);
+    }
+  } catch (err) {
+    res.status(500).send({
+      message: 'Internal error while getting posts',
       error: err,
     });
   }
