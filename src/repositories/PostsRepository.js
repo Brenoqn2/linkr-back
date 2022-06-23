@@ -1,7 +1,7 @@
 import db from '../config/database.js';
 
 function getAllPosts(page) {
-  const offset = page ? (page - 1) * 20 : 0;
+  const offset = page ? (page - 1) * 10 : 0;
 
   return db.query(
     `--sql
@@ -13,7 +13,7 @@ function getAllPosts(page) {
         JOIN USERS ON POSTS."userId" = USERS.id
         ORDER BY "createdAt" DESC
         OFFSET $1
-        LIMIT 20
+        LIMIT 10
     `,
     [offset]
   );
