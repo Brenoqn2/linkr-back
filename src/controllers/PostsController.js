@@ -21,6 +21,27 @@ export async function getPosts(req, res) {
   }
 }
 
+export async function checkMorePosts(req, res) {
+  const { page } = req.query;
+  let posts = [];
+
+  try {
+    const result = await PostsRepository.getAllPosts(page);
+    posts = result.rows;
+
+    if (posts.length > 0) {
+      res.status(200).send(true);
+    } else {
+      res.status(200).send(false);
+    }
+  } catch (err) {
+    res.status(500).send({
+      message: 'Internal error while getting posts',
+      error: err,
+    });
+  }
+}
+
 export async function getMetadata(req, res) {
   const { id } = req.params;
 

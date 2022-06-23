@@ -10,6 +10,7 @@ import {
   createComment,
   createRepost,
   countReposts,
+  checkMorePosts,
 } from '../controllers/PostsController.js';
 
 import { validatePostIdUserId } from '../middlewares/Authentication.js';
@@ -34,5 +35,6 @@ PostsRouter.put(
 );
 PostsRouter.post('/share/:postId', createRepost);
 PostsRouter.get('/reposts/:postId', countReposts);
+PostsRouter.get('/checkPosts', checkMorePosts);
 
 export default PostsRouter;
