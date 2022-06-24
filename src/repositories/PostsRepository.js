@@ -1,21 +1,22 @@
 import db from '../config/database.js';
 
-function getAllPosts(page) {
+function getAllPosts(userId, page) {
   const offset = page ? (page - 1) * 10 : 0;
 
   return db.query(
     `--sql
-        SELECT 
-          POSTS.*,
-          USERS.username,
-          USERS.picture
-        FROM POSTS
-        JOIN USERS ON POSTS."userId" = USERS.id
-        ORDER BY "createdAt" DESC
-        OFFSET $1
-        LIMIT 10
+      SELECT POSTS.*,
+      USERS.USERNAME,
+      USERS.PICTURE
+      FROM POSTS
+      LEFT JOIN FOLLOWERS F ON F."followingId" = POSTS."userId"
+      JOIN USERS ON POSTS."userId" = USERS.ID
+      WHERE F."followerId" = $1
+      ORDER BY "createdAt" DESC
+      OFFSET $2
+      LIMIT 10
     `,
-    [offset]
+    [userId, offset]
   );
 }
 
