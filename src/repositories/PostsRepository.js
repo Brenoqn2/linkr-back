@@ -118,7 +118,7 @@ function postRepost(postId, userRepostId) {
 async function getReposts(postId) {
   return db.query(
     `--sql
-    SELECT UR."username" as repostUser, UP."username" as postUser, P."link", P."content", UP.id, UP."picture"
+    SELECT UR."username" as repostUser, UP."username" as postUser, P."link", P."content", UP.id as "userId", UP."picture", R."id"
     FROM posts R
     JOIN posts P ON R."postId" = P."id"
     JOIN users UR ON R."userId" = UR."id"
