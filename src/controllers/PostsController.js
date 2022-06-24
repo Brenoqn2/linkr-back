@@ -1,6 +1,5 @@
 /* eslint-disable no-plusplus */
 import urlMetadata from 'url-metadata';
-import { response } from 'express';
 import PostsRepository from '../repositories/PostsRepository.js';
 import UserRepository from '../repositories/UserRepository.js';
 import hashtagsRepository from '../repositories/Hashtags.js';
@@ -8,10 +7,11 @@ import LikesRepository from '../repositories/LikesRepository.js';
 
 export async function getPosts(req, res) {
   const { page } = req.query;
-  let posts = [];
+  const { userId } = res.locals;
+  let posts;
 
   try {
-    const result = await PostsRepository.getAllPosts(page);
+    const result = await PostsRepository.getAllPosts(userId, page);
     posts = result.rows;
     const reposts = [];
     for (let i = 0; i < posts.length; i++) {
