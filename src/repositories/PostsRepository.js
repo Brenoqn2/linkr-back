@@ -129,6 +129,17 @@ async function getReposts(postId) {
   );
 }
 
+function checkNewPosts(postId) {
+  return db.query(
+    `--sql
+    SELECT "userId"
+    FROM posts
+    WHERE id > $1
+    `,
+    [postId]
+  );
+}
+
 const PostsRepository = {
   getAllPosts,
   getPostById,
@@ -140,6 +151,7 @@ const PostsRepository = {
   postComment,
   postRepost,
   getReposts,
+  checkNewPosts,
 };
 
 export default PostsRepository;
