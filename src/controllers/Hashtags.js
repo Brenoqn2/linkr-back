@@ -1,4 +1,5 @@
 import hashtagsRepository from '../repositories/Hashtags.js';
+import PostsRepository from '../repositories/PostsRepository.js';
 
 export async function getTrendingHashtags(req, res) {
   try {
@@ -16,7 +17,19 @@ export async function getHashtagPosts(req, res) {
   try {
     const result = await hashtagsRepository.getHashtagPosts(hashtag, page);
     const { rows: posts } = result;
-    console.log(posts);
+    const reposts = [];
+    for (let i = 0; i < posts.length; i++) {
+      if (posts[i].postId != 0) {
+        reposts.push({ repost: posts[i], indice: i });
+      }
+    }
+
+    for (let i = 0; i < reposts.length; i++) {
+      const resultReposts = await PostsRepository.getReposts(
+        reposts[i].repost.id
+      );
+      posts.splice(reposts[i].indice, 1, resultReposts.rows[0]);
+    }
     return res.status(200).send(posts);
   } catch (err) {
     console.log(err);

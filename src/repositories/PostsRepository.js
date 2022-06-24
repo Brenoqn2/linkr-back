@@ -109,8 +109,8 @@ function postRepost(postId, userRepostId) {
 
   return db.query(
     `--sql
-      INSERT INTO reposts ("postId", "userRepostId")
-      VALUES ($1, $2)
+      INSERT INTO POSTS ("postId", "userId", link, content)
+      VALUES ($1, $2, '', '')
     `,
     [postId, userRepostId]
   );

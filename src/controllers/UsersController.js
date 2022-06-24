@@ -1,5 +1,6 @@
 import FollowRepository from '../repositories/Follow.js';
 import UserRepository from '../repositories/UserRepository.js';
+import PostsRepository from '../repositories/PostsRepository.js';
 
 export async function getUserData(req, res) {
   const { authorization } = req.headers;
@@ -52,6 +53,20 @@ export async function getUserPosts(req, res) {
   try {
     const result = await UserRepository.getUserPosts(id, page);
     const { rows: posts } = result;
+
+    const reposts = [];
+    for (let i = 0; i < posts.length; i++) {
+      if (posts[i].postId != 0) {
+        reposts.push({ repost: posts[i], indice: i });
+      }
+    }
+
+    for (let i = 0; i < reposts.length; i++) {
+      const resultReposts = await PostsRepository.getReposts(
+        reposts[i].repost.id
+      );
+      posts.splice(reposts[i].indice, 1, resultReposts.rows[0]);
+    }
     res.status(200).send(posts);
   } catch (err) {
     res.status(500).send({
