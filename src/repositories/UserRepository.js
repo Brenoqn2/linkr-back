@@ -91,6 +91,17 @@ function getUsersByName(name, userId) {
   );
 }
 
+function getFollowingIds(userId) {
+  return db.query(
+    `--sql
+    SELECT "followingId" as id
+    FROM followers 
+    WHERE "followerId" = $1
+    `,
+    [userId]
+  );
+}
+
 const UserRepository = {
   getUserByToken,
   getUserById,
@@ -98,6 +109,7 @@ const UserRepository = {
   getUserByPostId,
   getUserPosts,
   getUsersByName,
+  getFollowingIds,
 };
 
 export default UserRepository;

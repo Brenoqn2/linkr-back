@@ -1,3 +1,4 @@
+/* eslint-disable no-plusplus */
 import urlMetadata from 'url-metadata';
 import PostsRepository from '../repositories/PostsRepository.js';
 import UserRepository from '../repositories/UserRepository.js';
@@ -37,6 +38,34 @@ export async function checkMorePosts(req, res) {
   } catch (err) {
     res.status(500).send({
       message: 'Internal error while getting posts',
+      error: err,
+    });
+  }
+}
+
+export async function checkNewPosts(req, res) {
+  const { id } = req.params;
+  const { authorization } = req.headers;
+  const token = authorization?.replace('Bearer ', '').trim();
+  try {
+    const postsResult = await PostsRepository.checkNewPosts(id);
+    const postsUsersIds = postsResult.rows;
+    const userIdResult = await UserRepository.getUserByToken(token);
+    const userId = userIdResult.rows[0].id;
+    const followingResult = await UserRepository.getFollowingIds(userId);
+    let followingIds = followingResult.rows;
+    followingIds = followingIds.map((object) => object.id);
+    let cont = 0;
+    for (let i = 0; i < postsUsersIds.length; i++) {
+      if (!followingIds.includes(postsUsersIds[i].userId)) {
+        cont++;
+      }
+    }
+    const newPosts = postsUsersIds.length - cont;
+    res.send({ newPosts });
+  } catch (err) {
+    res.status(500).send({
+      message: 'Internal error while getting new posts',
       error: err,
     });
   }
